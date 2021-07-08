@@ -12,6 +12,14 @@
 \usepackage[many]{tcolorbox}
 \usepackage[labelformat=empty]{caption,subfig}
 
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
+
 \setbeamertemplate{footline}[frame number]
 
 \beamertemplatenavigationsymbolsempty
@@ -73,34 +81,36 @@
 \begin{frame}
     \frametitle{Introduction: Definition and application}
 
-    \vspace{.3cm}
-    \begin{itemize}
-        \item  \begin{minipage}{5cm}
+    \vspace{.5cm}
     
-    Sum of zero-point energy
-        
+      \begin{minipage}{6.5cm}
+    \begin{tcolorbox}
+    \textbf{Casimir energy}
+    
+        Sum of zero-point energy:
         \begin{align*}
-    \mathcal{E}(a) = \frac{1}{2}\sum_{n}\hbar\omega_{n}(a),
+        \mathcal{E}(a) = \frac{1}{2}\sum_{n}\hbar\omega_{n}(a)
 \end{align*}
+$a$: the distance between two plates
 
+$\omega_{n}(a)$: $n$th cavity mode frequency
+    \end{tcolorbox}
+ 
+   \begin{tcolorbox}
+      \textbf{Casimir force per unit area}
+\begin{align*}
+    F(a) = -\frac{1}{A}\frac{\partial\mathcal{E}}{\partial a} = -\frac{\hbar c\pi^{2}}{240a^{4}}
+\end{align*}
+$A$: the area of the boundary plates
+   \end{tcolorbox} 
     \end{minipage}
-    \begin{minipage}{5cm}
-        \includegraphics[width=2.4cm]{figs/Hendrik_Casimir_(1958).jpg}
-        \hspace{0.05cm}
-        \includegraphics[width=2.4cm]{figs/Casimir_plates.png}
+    \hspace*{0.3cm}
+    \begin{minipage}{3cm}
+        \includegraphics[scale = 0.1]{figs/Casimir_plates.png}
     \end{minipage}
-    \vspace{0.3cm}
-    \item \begin{minipage}{5cm}
-    
-    MEMS \\
-    (Micro-Electro-Mechanical Systems)
+    \blfootnote{Image: Emok, ``Casimir forces on parallel plates
+'', Wikipedia, \textit{https://en.wikipedia.org/wiki/Casimir\_effect#/media/File:Casimir\_plates.svg}}
 
-    \end{minipage}
-    \begin{minipage}{5cm}
-    \centering
-        \includegraphics[width=3cm]{figs/MEMS.jpg}
-    \end{minipage}
-    \end{itemize}
 
 \end{frame}
 %==================Outline============================
@@ -122,10 +132,11 @@
     \frametitle{Krein spectral shift function (KSSF)}
     \vspace{0.3cm}
     \begin{minipage}{5cm}
-    
+    \textbf{Krein spectral shift function (KSSF)}
     \begin{align*}
     \xi(k) = \frac{1}{2\pi \mathrm{i}}\log\left(\frac{\det(S_{k})}{\det(S_{1,k})\cdots\det(S_{N,k})}\right)
 \end{align*}
+    
     \end{minipage}
     \begin{minipage}{2cm}
         \includegraphics[scale = 0.5]{figs/Domain.png}
@@ -133,7 +144,9 @@
 
 \begin{itemize}
     \item $k$ is the wavenumber
+    \vspace{0.1cm}
     \item $S_{i,k} = I + 2T_{i,k}$ is the scattering matrix associated with the $i$th object
+        \vspace{0.1cm}
     \item $T_{i,k}$ is the $T$-matrix associated with the $i$th object
 \end{itemize}
 \begin{tcolorbox}
@@ -208,8 +221,9 @@ When $f(x) = x$:
     \end{tcolorbox}
     This relation can help to derive:
     \begin{tcolorbox}
-    \textbf{Casimir energy formula\footnote{Hanisch F, Strohmaier A, Waters A. A relative trace formula for obstacle scattering[J]. arXiv preprint arXiv:2002.07291, 2020.} ---
+    \textbf{Casimir energy formula\footnote{Hanisch F, Strohmaier A, Waters A. A relative trace formula for obstacle scattering[J]. arXiv preprint arXiv:2002.07291, 2020.} \footnote{Reid M T H, Rodriguez A W, White J, et al. Efficient computation of Casimir interactions between arbitrary 3D objects[J]. Physical review letters, 2009, 103(4): 040401.} ---
     Single-layer operator method}
+   
     
     $$\mathcal{E}_{\textbf{slp}} =  -\frac{\hbar c}{2\pi}\int_{0}^{\infty}\Xi(\mathrm{i}k)dk$$
 \end{tcolorbox}
@@ -241,7 +255,7 @@ When $f(x) = x$:
 
 \textbf{Single-layer boundary operator:}
 \begin{align*}
-    (V_{k}\mu)(\boldsymbol{x}) := \int_{\Gamma}g_{k}(\boldsymbol{x},\boldsymbol{y})\psi(\boldsymbol{y})dS_{\boldsymbol{y}}, \ \ \ \ \ 
+    (\mathcal{V}_{k}\mu)(\boldsymbol{x}) := \int_{\Gamma}g_{k}(\boldsymbol{x},\boldsymbol{y})\mu(\boldsymbol{y})dS_{\boldsymbol{y}}, \ \ \ \ \ 
     \text{for}\ \mu\in H^{-\frac{1}{2}}(\Gamma) \  \text{and} \ \boldsymbol{x}\in\Gamma,
 \end{align*}
 where \begin{align*}
@@ -258,7 +272,7 @@ To discretize it, we define the continuous piecewise linear basis functions:
 \end{align*}
 with 
 \begin{align*}
-    \phi_{j}(\boldsymbol{x}_{j}) = \begin{cases}
+    \phi_{j}(\boldsymbol{x}_{i}) = \begin{cases}
         1, & i = j,\\
         0, & i\neq j.
     \end{cases}
@@ -268,7 +282,6 @@ with
 %===========Compute CasE Galkerkin form==============
 \begin{frame}
     \frametitle{Compute the Casimir energy}
-    \textbf{Task 1}: Compute the integrand $\log\det\left(V_{\mathrm{i}k}\tilde{V}_{\mathrm{i}k}^{-1}\right)$ by using the Galerkin discretization form of operators
 \vspace{0.3cm}
 
 \textbf{Matrix representation of Galerkin discretised single-layer boundary operator:}
@@ -300,7 +313,7 @@ and $\boldsymbol{\phi}^{(i)} = \begin{bmatrix}
     
     \begin{itemize}
         \item (Left) The integrand value $\log\det\left(V_{\mathrm{i}k}\tilde{V}_{\mathrm{i}k}^{-1}\right)$ exponentially decay with the increasing $k$.
-        \item (Right) By changing the variable from $k$ to $k = -\log(y)$, we can apply the normal trapezoidal rule to compute the integral.
+        \item (Right) By changing the variable from $k$ to $y$ with $k = -\log(y)$, we can apply the normal trapezoidal rule to compute the integral.
     \end{itemize}
     
 \begin{figure}[H]
@@ -317,91 +330,63 @@ and $\boldsymbol{\phi}^{(i)} = \begin{bmatrix}
 
 
 \end{frame}
+%===========Numerical experiments=======
+\begin{frame}{Numerical experiments: $h$-convergence}
+\vspace{.3cm}
+\begin{figure}
+    \centering
+    \includegraphics[scale = 0.2]{figs/Picture1.png}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[scale = 0.3]{figs/CasE_scalar.pdf}
+\end{figure}
+    
+\end{frame}
 %========= inverse free========
 \begin{frame}
-    \frametitle{Inverse-free methods for large-scale problems}
-Most of the eigenvalues of $V_{\mathrm{i}k}\tilde{V}_{\mathrm{i}k}^{-1}$ are around 1, which contribute nothing on the log determinant.
-
-\begin{figure}[H]
+    \frametitle{Speed up Casimir computations}
+    \begin{figure}[H]
     \centering
-    \includegraphics[scale = 0.35]{figs/eigenvalue_of_VVtilde.pdf}
+    \includegraphics[scale = 0.31]{figs/eigenvalue_of_VVtilde.pdf}
     \caption{The eigenvalues of the matrix $\mathsf{V}_{\mathrm{i}k}\tilde{\mathsf{V}}_{\mathrm{i}k}^{-1}$ when $\mathrm{i}k = 0.8\mathrm{i}$.}
 
 \end{figure}
+\begin{tcolorbox}
+        $\tilde{V}_{\mathrm{i}k}$ is a compact perturbation of $V_{\mathrm{i}k}$ $\implies$ most of the eigenvalues of  $V_{\mathrm{i}k}\tilde{V}_{\mathrm{i}k}^{-1}$ are around 1, which contribute nothing on the log determinant.
+    \end{tcolorbox}
 \end{frame}
 %===========inverse free I========
 \begin{frame}
-    \frametitle{Inverse-free methods for large-scale problems}
+    \frametitle{Speed up Casimir computations}
     \vspace{0.3cm}
-\textbf{Method I:} Inverse-free Krylov subspace method for computing $p$ smallest (or largest) eigenvalues of  $\mathsf{V}_{\mathrm{i}k}\tilde{\boldsymbol{x}} = \lambda \tilde{\mathsf{V}}_{\mathrm{i}k}\tilde{\boldsymbol{x}}$.
-\begin{tcolorbox}
-    \begin{algorithm}
-    \SetAlgoLined
-    Input: Symmetric  $A\in\mathbb{R}^{n\times n}$, s.p.d  $B\in\mathbb{R}^{n\times n}$ and
-    $X^{(1)} \in\mathbb{R}^{n\times p}$ with $X^{(1)*}BX = I_{p}$ and $m\geq 1$\\
-    Output: The approximated $p$ smallest eigenvalues of $A\boldsymbol{x} = \lambda B\boldsymbol{x}$\\
-    \begin{algorithmic}[1]
-        \STATE Set $\Theta^{(1)} = \text{diag}(X^{(1)*}AX^{(1)})$
-        \FOR {$k = 1, 2, \dots$} 
-                \FOR {$i = 1, 2, \dots, p$}
-                    \STATE Construct a basis $\hat{Z_{i}}$ of the $i$th Krylov subspace $K_{m}(A - \theta_{i}^{(k)}B, x_{i}^{(k)})$ with dimension $m$
-                    \STATE Orthonormalize $\left[\hat{Z_{1}} \cdots \hat{Z_{p}}\right]$ to obtain $Z$
-                    \STATE Project $A$ and $B$ on $Z$: $A_{m} = Z^{*}AZ$, $B_{m} = Z^{*}BZ$
-                    \STATE Compute $p$ smallest eigenpairs $(\theta_{i}, u_{i})$, $1\leq i \leq p$ of the matrix pencil $(A_{m}, B_{m})$
-                    \STATE $\Theta^{(k+1)} = \text{diag}(\theta_{1}, \dots, \theta_{p})$; $X^{(k+1)} = ZU$, $U = (u_{1} \cdots u_{p})$
-                \ENDFOR
-        \ENDFOR
-        \end{algorithmic}
-    \caption{Inverse-free Krylov subspace method for computing $p$ smallest eigenvalues of the generalized eigenvalue problem $A\boldsymbol{x} = \lambda B\boldsymbol{x}$}
-    \label{Alg for computing the evals}
-    \end{algorithm}
-\end{tcolorbox}
+    
+    \begin{itemize}
+        \item \textbf{Method I:} Inverse-free Krylov subspace method for computing $p$ smallest (largest) eigenvalues of  $\mathsf{V}_{\mathrm{i}k}\tilde{\boldsymbol{x}} = \lambda \tilde{\mathsf{V}}_{\mathrm{i}k}\tilde{\boldsymbol{x}}$ ($
+        \mathsf{V}_{\mathrm{i}k}\tilde{\mathsf{V}}_{\mathrm{i}k}^{-1}\tilde{\boldsymbol{x}} = \lambda \tilde{\boldsymbol{x}}$ ).
+                \vspace{0.3cm}
 
-\end{frame}
-%===========inverse free II========
-\begin{frame}
-    \frametitle{Inverse-free methods for large-scale problems}
-    \vspace{0.3cm}
-\textbf{Method II:} LU decomposition for inverting the matrix.
-\begin{align*}
-    \tilde{\mathsf{V}}_{\mathrm{i}k}^{-1}
-=  \begin{bmatrix}
-    \mathsf{V}_{11}^{-1}(\mathrm{i}k)    & \cdots & 0 \\
-    \vdots                              & \ddots & \vdots \\
-       0       & \cdots        & \mathsf{V}_{NN}^{-1} (\mathrm{i}k)\\
-\end{bmatrix}
-\end{align*}
- For each block $\mathsf{V}_{ii} = \mathsf{V}_{ii}(\mathrm{i}k)$, for $i = 1, 2, \dots, N$:
- \begin{itemize}
-     \item Compute its LU decomposition $\mathsf{V}_{ii} = \mathsf{L}_{ii}\mathsf{U}_{ii}$
-     \item Solve the linear system $\mathsf{L}_{ii}\mathsf{U}_{ii}\boldsymbol{x_{j}} = \boldsymbol{e}_{j}$, for $j = 1, 2, \dots, N_{\mathsf{V}_{ii}}$
-     \item $\mathsf{V}_{ii}^{-1} = \begin{bmatrix}
-    \boldsymbol{x}_{1} & \cdots & \boldsymbol{x}_{N_{\mathsf{V}_{ii}}}
-\end{bmatrix}$
- \end{itemize}
-\end{frame}
-%===========inverse free II========
-\begin{frame}
-    \frametitle{Inverse-free methods for large-scale problems}
-\textbf{Method II:} LU decomposition for inverting the matrix.
-    \vspace{0.3cm}
+        \begin{itemize}
+            \item Construct a basis $\hat{Z_{i}}$ of the $i$th Krylov subspace $K_{m}(\mathsf{V}_{\mathrm{i}k} - \theta_{i}\tilde{\mathsf{V}}_{\mathrm{i}k}, x_{i})$ with dimension $m$, for $i = 1, 2, \dots, p$
+                    \vspace{0.1cm}
+            \item Orthonormalize $\left[\hat{Z_{1}} \cdots \hat{Z_{p}}\right]$ to obtain $Z$ and project $\mathsf{V}_{\mathrm{i}k}$ and $\tilde{\mathsf{V}}_{\mathrm{i}k}$ on $Z$
+                    \vspace{0.1cm}
+            \item Compute the  $p$ smallest (or largest) eigenvalues for this pair of projected matrices
+        \end{itemize}
+                \vspace{0.3cm}
 
-\begin{itemize}
-    \item Define the inverse of the matrix $\tilde{\mathsf{V}}_{\mathrm{i}k}$ computed by the inverse-free $LU$ decomposition method as 
-$\tilde{\mathsf{V}}_{\mathrm{i}k}^{-1,\text{LU}}$.
-\vspace{0.2cm}
-\item Compute the basis of the Krylov subspace 
-$K_{m}(\mathsf{V}_{\mathrm{i}k}\tilde{\mathsf{V}}_{\mathrm{i}k}^{-1,\text{LU}}, \boldsymbol{b})$ and project
-via the Arnoldi iterations and project $\mathsf{V}_{\mathrm{i}k}\tilde{\mathsf{V}}_{\mathrm{i}k}^{-1,\text{LU}}$ onto it to obtain the Hessenberg matrix $H_{m}$.
-\vspace{0.2cm}
+        \item \textbf{Method II:} LU decomposition for inverting the matrix.
+        \vspace{0.3cm}
+        \begin{itemize}
+            \item Use LU decomposition to compute the inverse of each diagonal block matrix in $\tilde{\mathsf{V}}_{\mathrm{i}k}$                 \vspace{0.3cm}
+            \item Apply the standard Arnoldi iterations on $V_{\mathrm{i}k}\tilde{V}_{\mathrm{i}k}^{-1}$  to compute projected Hessenberg matrix
+        \end{itemize}
+    \end{itemize}
 
-\item The eigenvalues of Hessenberg matrix can be used to approximate extreme eigenvalues of $\mathsf{V}_{\mathrm{i}k}\tilde{\mathsf{V}}_{\mathrm{i}k}^{-1,\text{LU}}$
-
-\end{itemize}
 \end{frame}
 %===========Compare two inverse free methods=
 \begin{frame}
-    \frametitle{Compare two inverse-free methods}
+    \frametitle{Compare two methods}
 \begin{figure}[H]
     \centering
     \includegraphics[scale = 0.23]{figs/Method_GEP_m_50.pdf}
@@ -413,7 +398,7 @@ via the Arnoldi iterations and project $\mathsf{V}_{\mathrm{i}k}\tilde{\mathsf{V
 \end{frame}
 %===========Compare two inverse free methods=
 \begin{frame}
-    \frametitle{Compare two inverse-free methods}
+    \frametitle{Compare two methods}
 \begin{figure}[H]
     \centering
     \includegraphics[scale = 0.45]{figs/compare_two_inv_free_approaches.pdf}
@@ -422,25 +407,70 @@ via the Arnoldi iterations and project $\mathsf{V}_{\mathrm{i}k}\tilde{\mathsf{V
 \begin{frame}{Summary}
 \begin{itemize}
     \item Casimir energy can be computed via evaluating the log determinant of the single-layer boundary operators
-    
-    \item Efficiently computing the Casimir enengy by avoiding computing any inverse matrix and only approximating multiple extreme eigenvalues.
-    
+    \vspace{0.4cm}
+    \item Efficiently computing the Casimir enengy by avoiding directyly computing the inverse matrix and only approximating multiple extreme eigenvalues.
+        \vspace{0.4cm}
+
     \item Next step is to focus on the maxwell case, which needs us to change the operator to the electric field boundary operator. 
+        \vspace{0.4cm}
+
 \end{itemize}
 \end{frame}
+\begin{frame}{Bonus: Casimir energy in the Maxwell case}
+\begin{itemize}
+        \item $\Omega$: a domain assembling from individual objects $\Omega_{i}$
+        \item $M_{k}$: the Maxwell electric-field boundary operator defined on the boundary 
+        $\partial\Omega = \bigcup_{i = 1}^{N}\partial\Omega_{i}$
+        \item $\tilde{M}_{k}$: the ``diagonal part'' of $M_{k}$ by restricting the integral 
+        kernel to the subset $\bigcup_{i = 1}^{N}\partial\Omega_{i}\times\partial\Omega_{i}\subset\partial\Omega\times\partial\Omega$ 
+    \end{itemize}
+Define
+\begin{align*}
+    \Xi(k) = \log\det\left(M_{k}\tilde{M}_{k}^{-1}\right)
+\end{align*}
+
+\begin{tcolorbox}
+    \textbf{Casimir energy formula\footnote{ Efficient computation of Casimir interactions between arbitrary 3D objects[J]. Physical review letters, 2009, 103(4): 040401.} ---
+    electric-field  operator method}
+    
+    $$\mathcal{E}_{\textbf{elec}} =  -\frac{\hbar c}{2\pi}\int_{0}^{\infty}\Xi(\mathrm{i}k)dk$$
+\end{tcolorbox}
+\end{frame}
+\begin{frame}{Numerical experiments: $h$-convergence}
+\vspace{.3cm}
+\begin{figure}
+    \centering
+    \includegraphics[scale = 0.2]{figs/Picture1.png}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[scale = 0.3]{figs/CasE_vector.pdf}
+\end{figure}
+    
+\end{frame}
 \begin{frame}{Papers}
+\vspace{.3cm}
+{\small
 
     \begin{itemize}
+    \item Xiaoshu Sun, Timo Betcke, Alexander Strohmaier. \textit{Numerical aspects of Casimir energy computation in acoustic scattering} (2021) [\textbf{In preparation}]
+    \vspace{0.1cm}
+        \item Casimir H B G, Polder D. \textit{The influence of retardation on the London-van der Waals forces[J]}. Physical Review, 1948, 73(4): 360.
+        [\textbf{First Casimir paper}]
+        \vspace{0.1cm}
+        \item Reid M T H, Rodriguez A W, White J, et al. Efficient computation of Casimir interactions between arbitrary 3D objects[J]. Physical review letters, 2009, 103(4): 040401.
+        [\textbf{Casimir energy derived from the path-integral expression}]
+                \vspace{0.1cm}
+
         \item Hanisch F, Strohmaier A, Waters A.\textit{ A relative trace formula for obstacle scattering}. arXiv preprint arXiv:2002.07291, 2020. 
         \textbf{[KSSF and Casimir energy]}
-        
+                \vspace{0.1cm}
+
         \item Quillen P, Ye Q. \textit{A block inverse-free preconditioned Krylov subspace method for symmetric generalized eigenvalue problems}. Journal of computational and applied mathematics, 2010, 233(5): 1298-1313.
         \textbf{[Inverse-free Krylov subspace method for generalized eigenvalue problem]}
-        
-        \item  Saad Y. \textit{Numerical methods for large eigenvalue problems: revised edition}. Society for Industrial and Applied Mathematics, 2011.
-        \textbf{[Arnoldi iteration]}
-    \end{itemize}
-
+                \vspace{0.1cm}
+                \end{itemize}
+}
 \end{frame}
 \end{document}
 
